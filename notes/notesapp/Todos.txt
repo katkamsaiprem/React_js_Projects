@@ -1,0 +1,7 @@
+todos
+
+
+done
+--dont creat empty notes
+--display notes arr
+--style notes arr

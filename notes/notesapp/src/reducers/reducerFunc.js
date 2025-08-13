@@ -8,6 +8,8 @@ export const ReducerFunc=(state,{type,payload} )=>{
             return {...state, title: payload}
         case "AddNote":
             return {...state,notes:[...state.notes,{title:state.title,text:state.text,id:uuid()}]}//...state copies properties of original state obj and ...state.notes copies elements of original array
+        case "RemoveInput":
+            return {...state,title: "",text: ""}
         default: 
             return state
     }
