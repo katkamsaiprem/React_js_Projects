@@ -4,11 +4,14 @@ import "./index.css";
 import "./App.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
+import { NoteContextProvider } from "./context/index.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <NoteContextProvider>
+        <App />
+      </NoteContextProvider>
     </BrowserRouter>
   </StrictMode>
 );

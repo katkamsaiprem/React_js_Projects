@@ -1,7 +1,13 @@
 todos
-
-
+--archive page✔️
+--create route to archive page,we clilck on navlink of archive ,go to archive ,and in app.js ,i need to define route ,when route path is archive ,then render the archive component or page or element✔️
+--render navbar and asidebar common components inside archive page ✔️
+--create an arr to store archive notes ,use find method to find element to return✔️
+--remove note from the notes arr ,which note matches the id✔️
+--and render archive ✔️
+--remove pin icon from archive notes and make archive icnos filled use conditional rendering
 done
---dont creat empty notes
---display notes arr
---style notes arr
+--dont creat empty notes✔️
+--display notes arr✔️
+--style notes arr✔️
+--pinned and unpinned✔️
