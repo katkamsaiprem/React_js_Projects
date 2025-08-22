@@ -1,96 +1,77 @@
 import { useNote } from "../../context"
+import { findNoteInArchive, findNoteInBin } from "../../utilite";
 
-export const NoteCards = () => {
-
-    const { notes, dispatch } = useNote();
+export const NoteCards = ({ id, title, text, isPinned }) => {
+    const { dispatch, archive, bin } = useNote()
 
     const PinHandler = ({ id, isPinned }) => {
         dispatch({ type: "Pin", payload: { id, isPinned } })
 
     }
     const ArchiveHandler = ({ id }) => {
-        dispatch({ type: "Archive", payload: { id } })
+        !isNoteInArchive ?
+            dispatch({ type: "Add_Archive", payload: { id } }) :
+            dispatch({ type: "Remove_Archive", payload: { id } })
+
+
+    }
+    const BinHandler = ({ id }) => {
+        isNoteInArchive ? dispatch({ type: "Add_Bin_From_Archive", payload: { id } }) : dispatch({ type: "Add_Bin", payload: { id } })
+
 
 
     }
 
+    const RestoreHandler = ({ id }) => {
+        dispatch({ type: "Remove_Bin", payload: { id } })
 
-    const PinnedNotes = notes.filter(({ isPinned }) => isPinned)
-    const OtherNotes = notes.filter(({ isPinned }) => !isPinned)
+    }
+    const PermanentDeleteHandler = ({ id }) => {
+        dispatch({ type: "PermanentDelete", payload: { id } })
+    }
+    const isNoteInArchive = findNoteInArchive(archive, id);
+    const isNoteInBin = findNoteInBin(bin, id);
+
+
+
     return (<>
-        <div className="flex fex-row">
+        <div key={id} className="w-full sm:w-72 md:w-60 lg:w-64 xl:w-60 h-auto min-h-[120px] border border-neutral-900 p-2 sm:p-3 rounded-md bg-white hover:shadow-lg transition-shadow">
+            <div className="flex justify-between items-start mb-2">
+                <p className="font-semibold text-sm sm:text-base truncate flex-1 mr-2">{title}</p>
+                {!isNoteInArchive && !isNoteInBin && <button onClick={() => PinHandler({ id, isPinned })} className="flex-shrink-0 p-1 hover:bg-gray-100 rounded">
+                    <span className={`${isPinned ? `material-icons` : `material-icons-outlined`} text-sm sm:text-base`}>
+                        push_pin
+                    </span>
+                </button>}
+
+            </div>
             <div className="flex flex-col">
-                {/* Other Notes Section */}
-                {OtherNotes?.length > 0 && (
-                    <div className="mt-40 ml-4">
-                        {PinnedNotes?.length > 0 && (
-                            <h2 className="text-lg font-bold mb-4">Other Notes</h2>
-                        )}
-                        <div className="flex flex-wrap gap-4">
-                            {OtherNotes.map(({ title, text, id, isPinned }) => (
-                                <div key={id} className="w-60 h-[100px] border border-neutral-900 p-2 rounded-md">
-                                    <div className="flex justify-between">
-                                        <p>{title}</p>
-                                        <button onClick={() => PinHandler({ id, isPinned })}>
-                                            <span className={isPinned ? `material-icons` : `material-icons-outlined`}>
-                                                push_pin
-                                            </span>
-                                        </button>
-                                    </div>
-                                    <div className="flex flex-col ">
-                                        <p >{text}</p>
-                                        <div className="ml-42">
-                                            <button onClick={() => ArchiveHandler({ id })}>
-                                                <span class="material-icons-outlined">
-                                                    archive
-                                                </span>
-                                            </button>
-                                            <button>
-                                                <span class="material-icons-outlined">
-                                                    delete_outline
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}{/* Pinned Notes Section */}
-                {PinnedNotes?.length > 0 && (
-                    <div className={OtherNotes.length == 0 ? "mt-30 ml-4" : "mt-3 ml-4"}>
-                        <h2 className="text-lg font-bold mb-4">Pinned Notes</h2>
-                        <div className="flex flex-wrap gap-4">
-                            {PinnedNotes.map(({ title, text, id, isPinned }) => (
-                                <div key={id} className="w-60 h-[100px] border border-neutral-900 p-2 rounded-md">
-                                    <div className="flex justify-between">
-                                        <p>{title}</p>
-                                        <button onClick={() => PinHandler({ id, isPinned })}>
-                                            <span className={isPinned ? `material-icons` : `material-icons-outlined`}>
-                                                push_pin
-                                            </span>
-                                        </button>
-                                    </div>
-                                    <div className="flex flex-col ">
-                                        <p>{text}</p>
-                                        <div className="ml-42 ">
-                                            <button>
-                                                <span class="material-icons-outlined">
-                                                    archive
-                                                </span>
-                                            </button>
-                                            <button>
-                                                <span class="material-icons-outlined">
-                                                    delete_outline
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
+                <p className="text-xs sm:text-sm text-gray-700 mb-3 line-clamp-3 overflow-hidden">{text}</p>
+                <div className="flex justify-end gap-1">
+                    {!isNoteInBin && (<><button onClick={() => ArchiveHandler({ id })} className="p-1 hover:bg-gray-100 rounded">
+                        <span className={`${isNoteInArchive ? `material-icons` : `material-icons-outlined`} text-sm sm:text-base`}>
+                            archive
+                        </span>
+                    </button>
+
+                        <button onClick={() => BinHandler({ id })} className="p-1 hover:bg-gray-100 rounded">
+                            <span className="material-icons-outlined text-sm sm:text-base">
+                                delete_outline
+                            </span>
+                        </button></>)}
+                    {isNoteInBin && (
+                        <>
+                            <button onClick={() => RestoreHandler({ id })} className="p-1 hover:bg-gray-100 rounded">
+                                <span className="material-icons-outlined text-sm sm:text-base">restore_from_trash</span>
+                            </button>
+                            <button onClick={() => PermanentDeleteHandler({ id })} className="p-1 hover:bg-gray-100 rounded">
+                                <span className="material-icons-outlined text-sm sm:text-base">delete_forever</span>
+                            </button>
+                        </>
+                    )}
+
+
+                </div>
             </div>
         </div></>)
 

@@ -5,7 +5,21 @@ todos
 --create an arr to store archive notes ,use find method to find element to return✔️
 --remove note from the notes arr ,which note matches the id✔️
 --and render archive ✔️
---remove pin icon from archive notes and make archive icnos filled use conditional rendering
+
+
+--change archive icons filled and add unarchive feature,also remove pinned icon
+---check note is in archive arr or note arr✔️
+--take archive arr from useNote and use some func to check is note with id is there or not and store bool in var✔️
+--use bool to change archive icons styles✔️
+--remove pin icon from archive notes and make archive icnos filled use conditional rendering✔️
+
+--work on BIN
+--Onclick on bin->remove note form arr-add to new arr ->render new arr in bin✔️
+--remove pin icnos✔️
+--
+
+
+
 done
 --dont creat empty notes✔️
 --display notes arr✔️
