@@ -24,7 +24,7 @@ const Search = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(3),
     width: 'auto',
-  },
+  }, 
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -133,7 +133,6 @@ export default function Navbar() {
            <SelectorComponent/>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            
           </Box>
         </Toolbar>
       </AppBar>
